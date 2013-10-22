@@ -19,9 +19,9 @@ public class Run extends JFrame {
      * @param args the command line arguments
      */
     //declare Static Variables and methods
-    int no_of_mines = 200;
-    int width = 100;
-    int height = 100;
+    int no_of_mines = 10;
+    int width = 5;
+    int height = 5;
     int rnd_num_req = width * height * 2;
     int revealed[][] = new int[height][width];
     char mine_symbol = '*';
@@ -74,6 +74,22 @@ public class Run extends JFrame {
         return Ranked;
     }
 
+    public int minesAround(char[][] minefield, int y, int x) {
+        int mines = 0;
+        if (y != 0) {
+            y--;
+        }
+        if (x != 0) {
+            x--;
+        }
+        for (int jmax = minefield.length; y < jmax; y++) {
+            for (int imax = minefield[y].length; x < imax; x++) {
+                mines += (minefield[y][x] == '*') ? 1 : 0; // Can we use ternary without assigning
+            }
+        }
+        return mines;
+    }
+    
     public void printArray(char[][] a) {
         for (int i = 0; i < a.length; i++) {
             for (int j = 0; j < a[i].length; j++) {
