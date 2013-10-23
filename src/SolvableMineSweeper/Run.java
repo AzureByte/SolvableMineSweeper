@@ -4,10 +4,8 @@
  */
 package SolvableMineSweeper;
 
-import java.awt.Window;
 import java.util.Random;
 import javax.swing.JFrame;
-import java.util.Arrays;
 
 /**
  *
