@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 /**
  *
- * @author Kenric
+ * @author Kenric Anto D'Souza
  */
 public class Run extends JFrame {
 
