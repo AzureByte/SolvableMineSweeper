@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #################
 ## Eclipse
 #################
@@ -213,3 +214,6 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+=======
+# Package files #
+>>>>>>> 66a17a02f1a505b0904fc37aa00cb2c09a2eefa6
