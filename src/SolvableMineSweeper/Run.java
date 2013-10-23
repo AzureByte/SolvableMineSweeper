@@ -17,16 +17,15 @@ public class Run extends JFrame {
      * @param args the command line arguments
      */
     //declare Static Variables and methods
-    int no_of_mines = 10;
-    int width = 5;
-    int height = 5;
+    int no_of_mines = 2000;
+    int width = 1000;
+    int height = 1000;
     int rnd_num_req = width * height * 2;
     int revealed[][] = new int[height][width];
     char mine_symbol = '*';
 
     private char[][] mineRandomRanked(int height, int width, int num_mines) {
         ///Mined via ranking top n locations.
-
         int[][] rand_arr = new int[height][width]; //Declare empty number array
         Random gen = new Random(); // Declare random number generator
         int[][] Ranked = new int[num_mines][3]; //Declare ranking array
@@ -43,7 +42,7 @@ public class Run extends JFrame {
             }
         }
         for (int[] mine : Ranked) {
-        //store the location of the mines from Ranked in the mined array. 
+            //store the location of the mines from Ranked in the mined array. 
             mined[mine[1]][mine[2]] = mine_symbol;
         }
         return mined;
@@ -75,20 +74,31 @@ public class Run extends JFrame {
 
     private int minesAround(char[][] minefield, int y, int x) {
         int mines = 0;
-        if (y != 0) {
-            y--;
-        }
-        if (x != 0) {
-            x--;
-        }
-        for (int jmax = minefield.length; y < jmax; y++) {
-            for (int imax = minefield[y].length; x < imax; x++) {
-                mines += (minefield[y][x] == '*') ? 1 : 0; // Can we use ternary without assigning
+        int y_wall = minefield.length;
+        int x_wall = minefield[y].length;
+        int ymax = y + 2;
+        int xmax = x + 2;
+        y -= (y == 0) ? 0 : 1;
+        x -= (x == 0) ? 0 : 1;
+        for (int j = y; j < y_wall && j < ymax; j++) {
+            for (int i = x; i < x_wall && i < xmax; i++) {
+                mines += (minefield[j][i] == mine_symbol) ? 1 : 0; // Can we use ternary without assigning
             }
         }
         return mines;
     }
-    
+
+    private char[][] addNumbersToGrid(char[][] minefield) {
+        for (int y = 0; y < minefield.length; y++) {
+            for (int x = 0; x < minefield[y].length; x++) {
+                if (minefield[y][x] != mine_symbol) {
+                    minefield[y][x] = (char) ('0' + minesAround(minefield, y, x));
+                }
+            }
+        }
+        return minefield;
+    }
+
     private void printArray(char[][] array) {
         for (char[] row : array) {
             for (char row_ele : row) {
@@ -122,14 +132,14 @@ public class Run extends JFrame {
         setResizable(false);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        char[][] minefield1 = new char[height][width];
-        minefield1 = mineRandomRanked(height, width, no_of_mines);
+        char[][] minefield1;
+        minefield1 = addNumbersToGrid(mineRandomRanked(height, width, no_of_mines));
         printArray(minefield1);
         dispose();
     }
 
     public static void main(String[] args) {
         // TODO code application logic here
-        new Run();
+        Run run = new Run();
     }
 }
