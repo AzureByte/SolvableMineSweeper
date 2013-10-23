@@ -44,15 +44,16 @@ public class Run extends JFrame {
                 }
             }
         }
-        for (int y = 0; y < Ranked.length; y++) {
-            mined[Ranked[y][1]][Ranked[y][2]] = mine_symbol;
+        for (int[] mine : Ranked) {
+        //store the location of the mines from Ranked in the mined array. 
+            mined[mine[1]][mine[2]] = mine_symbol;
         }
         return mined;
     }
 
     public boolean isTop(int num, int[][] Ranked) {
-        for (int i = 0; i < Ranked.length; i++) {
-            if (Ranked[i][0] < num || Ranked[i][0] == 0) {
+        for (int[] mine : Ranked) {  //each 'mine' is a 1x3 array with [mine_probability, y_ord(row), x_ord(col)]
+            if (mine[0] < num || mine[0] == 0) {
                 return true;
             }
         }
@@ -90,28 +91,28 @@ public class Run extends JFrame {
         return mines;
     }
     
-    public void printArray(char[][] a) {
-        for (int i = 0; i < a.length; i++) {
-            for (int j = 0; j < a[i].length; j++) {
-                System.out.print(a[i][j]);
+    public void printArray(char[][] array) {
+        for (char[] row : array) {
+            for (char row_ele : row) {
+                System.out.print(row_ele);
             }
             System.out.println();
         }
     }
 
-    public void printArray(int[][] a) {
-        for (int i = 0; i < a.length; i++) {
-            for (int j = 0; j < a[i].length; j++) {
-                System.out.print(a[i][j]);
+    public void printArray(int[][] array) {
+        for (int[] row : array) {
+            for (int row_ele : row) {
+                System.out.print(row_ele);
             }
             System.out.println();
         }
     }
 
-    public void printArrayCSV(int[][] a) {
-        for (int i = 0; i < a.length; i++) {
-            for (int j = 0; j < a[i].length; j++) {
-                System.out.print(a[i][j] + ",");
+    public void printArrayCSV(int[][] array) {
+        for (int[] row : array) {
+            for (int row_ele : row) {
+                System.out.print(row_ele + ",");
             }
             System.out.println();
         }
