@@ -24,7 +24,7 @@ public class Run extends JFrame {
     int revealed[][] = new int[height][width];
     char mine_symbol = '*';
 
-    public char[][] mineRandomRanked(int height, int width, int num_mines) {
+    private char[][] mineRandomRanked(int height, int width, int num_mines) {
         ///Mined via ranking top n locations.
 
         int[][] rand_arr = new int[height][width]; //Declare empty number array
@@ -49,7 +49,7 @@ public class Run extends JFrame {
         return mined;
     }
 
-    public boolean isTop(int num, int[][] Ranked) {
+    private boolean isTop(int num, int[][] Ranked) {
         for (int[] mine : Ranked) {  //each 'mine' is a 1x3 array with [mine_probability, y_ord(row), x_ord(col)]
             if (mine[0] < num || mine[0] == 0) {
                 return true;
@@ -58,7 +58,7 @@ public class Run extends JFrame {
         return false;
     }
 
-    public int[][] replaceLowest(int[][] Ranked, int num, int y, int x) {
+    private int[][] replaceLowest(int[][] Ranked, int num, int y, int x) {
         int j = 0;
         int lowest = Ranked[j][0];
         for (int i = 1; i < Ranked.length; i++) {
@@ -73,7 +73,7 @@ public class Run extends JFrame {
         return Ranked;
     }
 
-    public int minesAround(char[][] minefield, int y, int x) {
+    private int minesAround(char[][] minefield, int y, int x) {
         int mines = 0;
         if (y != 0) {
             y--;
@@ -89,7 +89,7 @@ public class Run extends JFrame {
         return mines;
     }
     
-    public void printArray(char[][] array) {
+    private void printArray(char[][] array) {
         for (char[] row : array) {
             for (char row_ele : row) {
                 System.out.print(row_ele);
@@ -98,7 +98,7 @@ public class Run extends JFrame {
         }
     }
 
-    public void printArray(int[][] array) {
+    private void printArray(int[][] array) {
         for (int[] row : array) {
             for (int row_ele : row) {
                 System.out.print(row_ele);
@@ -107,7 +107,7 @@ public class Run extends JFrame {
         }
     }
 
-    public void printArrayCSV(int[][] array) {
+    private void printArrayCSV(int[][] array) {
         for (int[] row : array) {
             for (int row_ele : row) {
                 System.out.print(row_ele + ",");
