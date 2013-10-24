@@ -17,9 +17,9 @@ public class Run extends JFrame {
      * @param args the command line arguments
      */
     //declare Static Variables and methods
-    int no_of_mines = 2000;
-    int width = 1000;
-    int height = 1000;
+    int no_of_mines = 20;
+    int width = 20;
+    int height = 30;
     int rnd_num_req = width * height * 2;
     int revealed[][] = new int[height][width];
     char mine_symbol = '*';
@@ -129,17 +129,22 @@ public class Run extends JFrame {
     public Run() {
         setTitle("Solvable MineSweeper");
         setSize(400, 400);
+        setLocation(50,50);
         setResizable(false);
-        setVisible(true);
+        //setVisible(true); //Redundant since its used later.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        
+        /*Creates a newly seeded minefield*/
         char[][] minefield1;
         minefield1 = addNumbersToGrid(mineRandomRanked(height, width, no_of_mines));
         printArray(minefield1);
-        dispose();
+        //dispose(); //Closes the window. In here to check run times.
     }
-
+    
     public static void main(String[] args) {
         // TODO code application logic here
-        Run run = new Run();
-    }
-}
+        JFrame window = new Run();
+        window.show();
+    }//main
+}//class Run
