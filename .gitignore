@@ -35,6 +35,8 @@ local.properties
 #################
 
 *.xml
+*.properties
+*.mf
 
 #################
 ## Visual Studio
