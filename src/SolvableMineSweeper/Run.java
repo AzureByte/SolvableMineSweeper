@@ -2,10 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package SolvableMineSweeper;
+package solvableminesweepernetbeans;
 
 import java.util.Random;
+import java.awt.GridLayout;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  *
@@ -14,15 +16,26 @@ import javax.swing.JFrame;
 public class Run extends JFrame {
 
     /**
+     * 
+     */
+	private static final long serialVersionUID = 1L;
+    /**
      * @param args the command line arguments
      */
+    
     //declare Static Variables and methods
     int no_of_mines = 20;
-    int width = 20;
-    int height = 30;
+    int width = 10;
+    int height = 10;
+    
+    JPanel p = new JPanel();
+    Button buttons[] = new Button[width*height];
+    
     int rnd_num_req = width * height * 2;
     int revealed[][] = new int[height][width];
     char mine_symbol = '*';
+    final int window_width = 400;
+    final int window_height = 400;
 
     private char[][] mineRandomRanked(int height, int width, int num_mines) {
         ///Mined via ranking top n locations.
@@ -127,24 +140,32 @@ public class Run extends JFrame {
     }
 
     public Run() {
-        setTitle("Solvable MineSweeper");
-        setSize(400, 400);
+        super("Solvable MineSweeper");
+        setSize(window_width, window_height);
         setLocation(50,50);
         setResizable(false);
         //setVisible(true); //Redundant since its used later.
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         
         /*Creates a newly seeded minefield*/
         char[][] minefield1;
         minefield1 = addNumbersToGrid(mineRandomRanked(height, width, no_of_mines));
         printArray(minefield1);
-        //dispose(); //Closes the window. In here to check run times.
+        
+        /*Displays the covered Minefield*/
+        p.setLayout(new GridLayout(width,height));
+        for (int i = 0; i < width*height; i++) {
+            buttons[i] = new Button(window_width, window_height, width, height);
+            p.add(buttons[i]);
+        }
+        add(p); //Adds the Jpanel to the Jframe window
+        setVisible(true);
+        //dispose(); //Closes the window. Uncomment to check run times.
     }
     
     public static void main(String[] args) {
         // TODO code application logic here
-        JFrame window = new Run();
-        window.show();
+        new Run();
     }//main
 }//class Run
