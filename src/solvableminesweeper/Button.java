@@ -6,94 +6,48 @@
 
 package solvableminesweepernetbeans;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import static javax.swing.JOptionPane.showMessageDialog;
-import javax.swing.SwingUtilities;
 
 /**
  *
  * @author Kenric
  */
-public class Button extends JButton implements MouseListener{
+public class Button extends JButton{
     ImageIcon F,Q,I; //Flag, Question mark, Identity
     byte value = 0;
     /*
-    0:nothing
+    0:nothing/unclicked
     1:Flag
     2:Question Mark
     */
+    int x;
+    int y;
     int width;
     int height;
     char beneath;
     boolean dug = false; // to check if the square has been dug up and prevent further interraction if it has.
     
-    public Button(int window_width, int window_height, int width, int height, char identity){
+    // ww = window_width, wh = window_height
+    public Button(int x, int y, int scaled_width, int scaled_height, char identity){
         beneath = identity;
+        this.x = x;
+        this.y = y;
+        this.width = scaled_width;
+        this.height = scaled_height;
         switch(beneath){
             case '*':
-                I = new ImageIcon(new ImageIcon(this.getClass().getResource("Mine.png")).getImage().getScaledInstance(window_width/width, window_height/height, java.awt.Image.SCALE_SMOOTH));
+                I = toImageIcon("Mine.png");
                 break;
             default:
-                I = new ImageIcon(new ImageIcon(this.getClass().getResource(beneath+".png")).getImage().getScaledInstance(window_width/width, window_height/height, java.awt.Image.SCALE_SMOOTH));
+                I = toImageIcon(beneath+".png");
                 break;                
         }
-        F = new ImageIcon(new ImageIcon(this.getClass().getResource("Flag.png")).getImage().getScaledInstance(window_width/width, window_height/height, java.awt.Image.SCALE_SMOOTH));
-        Q = new ImageIcon(new ImageIcon(this.getClass().getResource("QMark.png")).getImage().getScaledInstance(window_width/width, window_height/height, java.awt.Image.SCALE_SMOOTH));
-        addMouseListener(this);
-        this.width = width;
-        this.height = height;
+        F = toImageIcon("Flag.png");
+        Q = toImageIcon("QMark.png");
     }
     
-    @Override
-    public void mouseClicked(MouseEvent e){
-        if(!this.dug)
-        {
-            //Code for detecting right clicks (includes support for mac computers with control clicking) and adding flags or question marks
-            if(SwingUtilities.isRightMouseButton(e) || e.isControlDown()){
-                value++;
-                value%=3;
-                switch(value){
-                    case 0:
-                        this.setIcon(null);
-                        break;
-                    case 1:
-                        this.setIcon(F);
-                        break;
-                    case 2:
-                        this.setIcon(Q);
-                        break;
-                }
-            }
-            //Code for checking for the mine, empty space or number
-            else if(SwingUtilities.isLeftMouseButton(e)){
-                this.setIcon(I);
-                this.dug = true;
-                if(this.beneath=='*'){
-                    solvableminesweepernetbeans.Run.gameLoss();
-                }
-                else{
-//                    solvableminesweepernetbeans.Run.checkForWin();
-                }
-            }
-        }
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
+    private ImageIcon toImageIcon(String path){
+        return new ImageIcon(new ImageIcon(this.getClass().getResource(path)).getImage().getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH));
     }
 }

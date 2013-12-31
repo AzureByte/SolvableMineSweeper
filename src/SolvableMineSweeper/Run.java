@@ -6,15 +6,16 @@ package solvableminesweepernetbeans;
 
 import java.util.Random;
 import java.awt.GridLayout;
-import javax.swing.JFrame;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import javax.swing.*;
 import static javax.swing.JOptionPane.showMessageDialog;
-import javax.swing.JPanel;
 
 /**
  *
  * @author Kenric Anto D'Souza
  */
-public class Run extends JFrame {
+public class Run extends JFrame implements MouseListener {
 
     /**
      * 
@@ -25,7 +26,7 @@ public class Run extends JFrame {
      */
     
     //declare Static Variables and methods
-    int no_of_mines = 20;
+    int no_of_mines = 15;
     int width = 10;
     int height = 10;
     
@@ -103,6 +104,23 @@ public class Run extends JFrame {
         return mines;
     }
 
+    private void openWhites(int y, int x) {
+        int y_wall = new_minefield.length;
+        int x_wall = new_minefield[y].length;
+        int ymax = y + 2;
+        int xmax = x + 2;
+        y -= (y == 0) ? 0 : 1;
+        x -= (x == 0) ? 0 : 1;
+        for (int j = y; j < y_wall && j < ymax; j++) {
+            for (int i = x; i < x_wall && i < xmax; i++) {
+                Button b = buttons[j*x_wall+i];
+                if(!b.dug){
+                    digUp(b);
+                }
+            }
+        }
+    }
+
     private char[][] addNumbersToGrid(char[][] minefield) {
         for (int y = 0; y < minefield.length; y++) {
             for (int x = 0; x < minefield[y].length; x++) {
@@ -142,8 +160,6 @@ public class Run extends JFrame {
     }
 
     
-    
-    
     public Run() {
         super("Solvable MineSweeper");
         setSize(window_width, window_height);
@@ -152,6 +168,14 @@ public class Run extends JFrame {
         //setVisible(true); //Redundant since its used later.
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
+        /*Menus*/
+        JMenuBar menuBar;
+        JMenu menu, submenu;
+        JMenuItem menuItem;
+        JRadioButtonMenuItem rbMenuItem;
+        JCheckBoxMenuItem cbMenuItem;
+        
+        menuBar = new JMenuBar();
         
         /*Creates a newly seeded minefield*/
         new_minefield = addNumbersToGrid(mineRandomRanked(height, width, no_of_mines));
@@ -162,7 +186,8 @@ public class Run extends JFrame {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 int dimension_tf = y * width + x; //transforms the co-ordinates from a 2d-array to a 1d-array
-                buttons[dimension_tf] = new Button(window_width, window_height, width, height, new_minefield[y][x]);
+                buttons[dimension_tf] = new Button(x, y, (int) ((window_width/this.width)*0.8), (int) ((window_height/this.height)*0.8), new_minefield[y][x]);
+                buttons[dimension_tf].addMouseListener(this);
                 p.add(buttons[dimension_tf]);
             }
         }
@@ -203,4 +228,67 @@ public class Run extends JFrame {
         // TODO code application logic here
         new Run();
     }//main
+
+    @Override
+    public void mouseClicked(MouseEvent e){
+        Button b = (Button) e.getSource();
+        if(!b.dug)
+        {
+            if(SwingUtilities.isRightMouseButton(e) || e.isControlDown()){
+                b.value++;
+                b.value%=3;
+                switch(b.value){
+                    case 0:
+                        b.setIcon(null);
+                        break;
+                    case 1:
+                        b.setIcon(b.F);
+                        break;
+                    case 2:
+                        b.setIcon(b.Q);
+                        break;
+                }
+            }
+            //Code for checking for the mine, empty space or number.
+            //Also prevents clicking if button is flagged or question marked.
+            else if(SwingUtilities.isLeftMouseButton(e) && b.value==0){
+                digUp(b);
+                if(b.beneath=='*'){
+                    gameLoss();
+                }
+                else{
+                    checkForWin();
+                }
+            }
+        }
+    }
+    
+    public void digUp(Button b){
+        if(b.beneath=='0' && !b.dug){
+            b.dug=true;
+            b.setIcon(b.I);
+            openWhites(b.y, b.x);
+        }
+        else{
+            b.dug=true;
+            b.setIcon(b.I);
+        }
+    }
+                
+    
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
 }//class Run
