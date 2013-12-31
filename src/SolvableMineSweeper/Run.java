@@ -7,6 +7,7 @@ package solvableminesweepernetbeans;
 import java.util.Random;
 import java.awt.GridLayout;
 import javax.swing.JFrame;
+import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.JPanel;
 
 /**
@@ -31,6 +32,7 @@ public class Run extends JFrame {
     JPanel p = new JPanel();
     Button buttons[] = new Button[width*height];
     
+    static char[][] new_minefield;
     int rnd_num_req = width * height * 2;
     int revealed[][] = new int[height][width];
     char mine_symbol = '*';
@@ -139,6 +141,9 @@ public class Run extends JFrame {
         }
     }
 
+    
+    
+    
     public Run() {
         super("Solvable MineSweeper");
         setSize(window_width, window_height);
@@ -149,20 +154,50 @@ public class Run extends JFrame {
         
         
         /*Creates a newly seeded minefield*/
-        char[][] minefield1;
-        minefield1 = addNumbersToGrid(mineRandomRanked(height, width, no_of_mines));
-        printArray(minefield1);
+        new_minefield = addNumbersToGrid(mineRandomRanked(height, width, no_of_mines));
+        printArray(new_minefield);
         
         /*Displays the covered Minefield*/
         p.setLayout(new GridLayout(width,height));
-        for (int i = 0; i < width*height; i++) {
-            buttons[i] = new Button(window_width, window_height, width, height);
-            p.add(buttons[i]);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int dimension_tf = y * width + x; //transforms the co-ordinates from a 2d-array to a 1d-array
+                buttons[dimension_tf] = new Button(window_width, window_height, width, height, new_minefield[y][x]);
+                p.add(buttons[dimension_tf]);
+            }
         }
         add(p); //Adds the Jpanel to the Jframe window
         setVisible(true);
         //dispose(); //Closes the window. Uncomment to check run times.
     }
+    
+    private static void endGame(){
+        //Add endGame logic
+    }
+    
+    public static void gameLoss(){
+        showMessageDialog(null, "Sorry, you lose");
+        endGame();
+    }
+    
+    public static void gameWin(){
+        showMessageDialog(null, "Congrats! you win!");
+        endGame();
+    }
+    
+    public void checkForWin(){
+        for (int y = 0; y < width; y++) {
+            for (int x = 0; x < height; x++) {
+                int dimension_tf = y * width + x; //transforms the co-ordinates from a 2d-array to a 1d-array
+                if(!buttons[dimension_tf].dug && buttons[dimension_tf].beneath != '*'){
+                    return;
+                }
+            }
+        }
+        gameWin();
+    }
+    
+    
     
     public static void main(String[] args) {
         // TODO code application logic here
