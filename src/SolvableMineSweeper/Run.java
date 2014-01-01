@@ -216,6 +216,7 @@ public class Run extends JFrame implements MouseListener, ItemListener, ActionLi
     
     private void newGame(){
         
+        p.removeAll();
         /*Creates a newly seeded minefield*/
         new_minefield = addNumbersToGrid(mineRandomRanked(height, width, no_of_mines));
         printArray(new_minefield);
@@ -249,7 +250,6 @@ public class Run extends JFrame implements MouseListener, ItemListener, ActionLi
         
         if (JOptionPane.showConfirmDialog(null, "Would you like to play again?", "",  JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
         {
-            p.removeAll();
             newGame();
         }
         else
