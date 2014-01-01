@@ -14,7 +14,7 @@ import javax.swing.JButton;
  * @author Kenric
  */
 public class Button extends JButton{
-    ImageIcon F,Q,I; //Flag, Question mark, Identity
+    ImageIcon F,Q,I,WF,MM; //Flag, Question mark, Identity, Wrong Flag, Missed Mine
     byte value = 0;
     /*
     0:nothing/unclicked
@@ -41,10 +41,12 @@ public class Button extends JButton{
                 break;
             default:
                 I = toImageIcon(beneath+".png");
-                break;                
+                break;
         }
         F = toImageIcon("Flag.png");
         Q = toImageIcon("QMark.png");
+        WF = toImageIcon("Wrong_Flag.png");
+        MM = toImageIcon("Missed_Mine.png");
     }
     
     private ImageIcon toImageIcon(String path){

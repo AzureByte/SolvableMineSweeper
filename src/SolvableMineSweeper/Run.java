@@ -6,6 +6,11 @@ package solvableminesweepernetbeans;
 
 import java.util.Random;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.*;
@@ -15,7 +20,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
  *
  * @author Kenric Anto D'Souza
  */
-public class Run extends JFrame implements MouseListener {
+public class Run extends JFrame implements MouseListener, ItemListener, ActionListener {
 
     /**
      * 
@@ -37,8 +42,8 @@ public class Run extends JFrame implements MouseListener {
     int rnd_num_req = width * height * 2;
     int revealed[][] = new int[height][width];
     char mine_symbol = '*';
-    final int window_width = 400;
-    final int window_height = 400;
+    int window_width = 400;
+    int window_height = 400;
 
     private char[][] mineRandomRanked(int height, int width, int num_mines) {
         ///Mined via ranking top n locations.
@@ -120,7 +125,18 @@ public class Run extends JFrame implements MouseListener {
             }
         }
     }
-
+    
+    public void digUp(Button b){
+        if(b.beneath=='0' && !b.dug){
+            b.dug=true;
+            openWhites(b.y, b.x);
+        }
+        else{
+            b.dug=true;
+        }
+        b.setIcon(b.I);
+    }
+    
     private char[][] addNumbersToGrid(char[][] minefield) {
         for (int y = 0; y < minefield.length; y++) {
             for (int x = 0; x < minefield[y].length; x++) {
@@ -158,24 +174,47 @@ public class Run extends JFrame implements MouseListener {
             System.out.println();
         }
     }
-
     
     public Run() {
         super("Solvable MineSweeper");
         setSize(window_width, window_height);
         setLocation(50,50);
         setResizable(false);
-        //setVisible(true); //Redundant since its used later.
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         /*Menus*/
         JMenuBar menuBar;
-        JMenu menu, submenu;
+        JMenu menu;
         JMenuItem menuItem;
-        JRadioButtonMenuItem rbMenuItem;
-        JCheckBoxMenuItem cbMenuItem;
         
         menuBar = new JMenuBar();
+        
+        menu = new JMenu("Main");
+        menu.setMnemonic(KeyEvent.VK_M);
+        menu.getAccessibleContext().setAccessibleDescription("The main menu");
+        menuBar.add(menu);
+        
+        menuItem = new JMenuItem("New Game", KeyEvent.VK_N);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, ActionEvent.ALT_MASK));
+        menuItem.getAccessibleContext().setAccessibleDescription("This doesn't really do anything");
+        menuItem.addActionListener(this);
+        menu.add(menuItem);
+        
+        menuItem = new JMenuItem("Exit", KeyEvent.VK_X);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
+        menuItem.getAccessibleContext().setAccessibleDescription("Exit the game.");
+        menuItem.addActionListener(this);
+        menu.add(menuItem);
+        
+        setJMenuBar(menuBar);
+
+        //Show the window
+        setVisible(true);
+
+        //dispose(); //Closes the window. Uncomment to check start up times.
+    }
+    
+    private void newGame(){
         
         /*Creates a newly seeded minefield*/
         new_minefield = addNumbersToGrid(mineRandomRanked(height, width, no_of_mines));
@@ -183,29 +222,48 @@ public class Run extends JFrame implements MouseListener {
         
         /*Displays the covered Minefield*/
         p.setLayout(new GridLayout(width,height));
+        int width_tf = (int) ((window_width/this.width)*0.8);
+        int height_tf = (int) ((window_height/this.height)*0.8);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 int dimension_tf = y * width + x; //transforms the co-ordinates from a 2d-array to a 1d-array
-                buttons[dimension_tf] = new Button(x, y, (int) ((window_width/this.width)*0.8), (int) ((window_height/this.height)*0.8), new_minefield[y][x]);
+                buttons[dimension_tf] = new Button(x, y, width_tf , height_tf , new_minefield[y][x]);
                 buttons[dimension_tf].addMouseListener(this);
                 p.add(buttons[dimension_tf]);
             }
         }
         add(p); //Adds the Jpanel to the Jframe window
         setVisible(true);
-        //dispose(); //Closes the window. Uncomment to check run times.
     }
     
-    private static void endGame(){
+    private void endGame(){
         //Add endGame logic
+        for (Button b : buttons) {
+            if(!b.dug)
+                if(b.beneath != mine_symbol && b.value == 1)
+                    b.setIcon(b.WF);
+                else if(b.beneath == mine_symbol){
+                    b.setIcon(b.MM);
+            }
+        }
+        
+        if (JOptionPane.showConfirmDialog(null, "Would you like to play again?", "",  JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+        {
+            p.removeAll();
+            newGame();
+        }
+        else
+        {
+            p.removeAll();
+        }
     }
     
-    public static void gameLoss(){
+    public void gameLoss(){
         showMessageDialog(null, "Sorry, you lose");
         endGame();
     }
     
-    public static void gameWin(){
+    public void gameWin(){
         showMessageDialog(null, "Congrats! you win!");
         endGame();
     }
@@ -221,8 +279,6 @@ public class Run extends JFrame implements MouseListener {
         }
         gameWin();
     }
-    
-    
     
     public static void main(String[] args) {
         // TODO code application logic here
@@ -263,19 +319,6 @@ public class Run extends JFrame implements MouseListener {
         }
     }
     
-    public void digUp(Button b){
-        if(b.beneath=='0' && !b.dug){
-            b.dug=true;
-            b.setIcon(b.I);
-            openWhites(b.y, b.x);
-        }
-        else{
-            b.dug=true;
-            b.setIcon(b.I);
-        }
-    }
-                
-    
     @Override
     public void mousePressed(MouseEvent e) {
     }
@@ -291,4 +334,22 @@ public class Run extends JFrame implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
     }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JMenuItem source = (JMenuItem) e.getSource();
+        if(source.getText()=="Exit"){
+            dispose();
+        }
+        if(source.getText()=="New Game"){
+            newGame();
+            //TODO add a function for new game
+        }
+    }
 }//class Run
+
+
