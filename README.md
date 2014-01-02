@@ -5,6 +5,11 @@ To create a version of minesweeper that is less frustrating
 
 ===================
 
+Update 2014-January-2
+
+Added a playable binary to the project.
+
+
 Update 2013-December-12
 
 Project is still active, however because of computers crashing and switching IDEs from Eclipse to Netbeans and viceversa its been difficult moving things around. Possible cause is bad initial commit decision. Might have required a better set up of things from the get go.
