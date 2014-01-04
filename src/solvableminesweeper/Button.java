@@ -50,6 +50,6 @@ public class Button extends JButton{
     }
     
     private ImageIcon toImageIcon(String path){
-        return new ImageIcon(new ImageIcon(this.getClass().getResource("./images/"+path)).getImage().getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH));
+        return new ImageIcon(new ImageIcon(getClass().getResource("images/"+path)).getImage().getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH));
     }
 }
