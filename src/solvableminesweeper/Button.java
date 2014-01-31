@@ -14,10 +14,10 @@ import javax.swing.JButton;
  * @author Kenric
  */
 public class Button extends JButton{
-    ImageIcon F,Q,I,WF,MM; //Flag, Question mark, Identity, Wrong Flag, Missed Mine
+    ImageIcon D,F,Q,I,WF,MM; //Dirt, Flag, Question mark, Identity, Wrong Flag, Missed Mine
     byte value = 0;
     /*
-    0:nothing/unclicked
+    0:Dirt(nothing/unclicked)
     1:Flag
     2:Question Mark
     */
@@ -43,6 +43,7 @@ public class Button extends JButton{
                 I = toImageIcon(beneath+".png");
                 break;
         }
+        D = toImageIcon("Dirt.gif");
         F = toImageIcon("Flag.png");
         Q = toImageIcon("QMark.png");
         WF = toImageIcon("Wrong_Flag.png");
@@ -50,6 +51,5 @@ public class Button extends JButton{
     }
     
     private ImageIcon toImageIcon(String path){
-        return new ImageIcon(new ImageIcon(getClass().getResource("images/"+path)).getImage().getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH));
-    }
+        return new ImageIcon(new ImageIcon(this.getClass().getResource("images/"+path)).getImage().getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH));    }
 }
