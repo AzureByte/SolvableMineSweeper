@@ -52,6 +52,11 @@ public class Counter extends JPanel {
         updateDigits();
     }
     
+    public void updateValue(int num){
+        this.value = num;
+        updateDigits();
+    }
+    
     private ImageIcon toImageIcon(String path){
         return new ImageIcon(new ImageIcon(this.getClass().getResource("images/digits/"+path)).getImage().getScaledInstance(width/3, height, java.awt.Image.SCALE_SMOOTH));
     }

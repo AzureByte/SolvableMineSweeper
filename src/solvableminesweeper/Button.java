@@ -15,18 +15,18 @@ import javax.swing.JButton;
  */
 public class Button extends JButton{
     ImageIcon D,F,Q,I,WF,MM; //Dirt, Flag, Question mark, Identity, Wrong Flag, Missed Mine
-    byte value = 0;
-    /*
-    0:Dirt(nothing/unclicked)
-    1:Flag
-    2:Question Mark
-    */
     int x;
     int y;
     int width;
     int height;
     char beneath;
     boolean dug = false; // to check if the square has been dug up and prevent further interraction if it has.
+    byte value = 0;
+    /*
+    0:Dirt(nothing/unclicked)
+    1:Flag
+    2:Question Mark
+    */
     
     // ww = window_width, wh = window_height
     public Button(int x, int y, int scaled_width, int scaled_height, char identity){
