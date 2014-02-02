@@ -5,6 +5,11 @@ To create a version of minesweeper that is less frustrating
 
 ===================
 
+Update 2014-February-2
+
+Completed the basic 'solvability' mechanic. The game is fully playable now, open the .jar file in the 'bin' folder.
+
+
 Update 2014-January-2
 
 Added a playable binary to the project.
